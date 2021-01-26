@@ -1,20 +1,8 @@
+// ----------- boilerplate starts ---------
+
 #include<iostream>
+#include<vector>
 using namespace std;
-
-// To access the members of a structure/ class 
-// using an object, we use . operator
-
-// To access the members of a structure/ class 
-// using a pointer, we use -> operator
-
-// "head" points to the first node of linked list
-// head = NULL if linked list = empty
-
-// We take head by ref when we're modifying the linked list
-// else we take it by value
-
-// excellent explaination:
-// https://www.youtube.com/watch?v=Crqgl10aIGQ
 
 class Node{
 	public: 	
@@ -79,22 +67,67 @@ string search(Node* head, int key)
 	{
 		location_counter++;
 		if(temp->data == key) 
-			{ return "\n" + to_string(key) + " found at position " + to_string(location_counter); }
+			{ return "\n" + to_string(key) + " found at position " + to_string(location_counter) + "\n"; }
 		temp = temp->next;
 	}
-	return "\n" + to_string(key) + " not found";
+	return "\n" + to_string(key) + " not found\n";
+}
+
+void delete_all_nodes(Node* head) // empty the memory to avoid leaked memory
+{
+	vector<Node*> all_addresses; // will store addresses of all nodes
+	Node* temp = head;
+	while(temp != NULL)
+	{
+		all_addresses.push_back(temp);
+		temp = temp->next;
+	}
+	
+	for(int i=0; i<all_addresses.size(); i++)
+	{
+		delete all_addresses[i];
+	}
+}
+
+// ----------- boilerplate ends ---------
+
+// taking head by reference as we'll modify original linked list
+void remove_dups(Node* &head)
+{
+	vector<int> unique_elements;
+	int data;
+	Node* temp = head;
+	
+	while(temp != NULL)
+	{
+		int data = temp->data;
+		if (data_exists(data, unique_elements))
+			//delete this node
+		else 
+		
+		temp = temp->next;
+	}
+}
+
+bool data_exists(int data, &v)
+{
+	for(int i=0; i<v.size(); i++)
+	{
+		if(data == v[i])
+			return true;
+	}
+	return false;
 }
 
 int main()
 {
 	Node* head = NULL;
 	insert_at_tail(head, 1);
-	insert_at_tail(head, 2);
+	insert_at_tail(head, 55);
 	insert_at_tail(head, 3);
 	insert_at_tail(head, 4);
-	insert_at_tail(head, 5);
-	insert_at_head(head, 77);
-	display(head);
-	cout<<"\n"<<search(head, 3);
-	cout<<"\n"<<search(head, 223232);
+	insert_at_tail(head, 1);
+	insert_at_tail(head, 55);
+	insert_at_tail(head, 101);		
+	return 0;
 }
