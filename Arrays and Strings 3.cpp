@@ -1,4 +1,5 @@
 #include<iostream>
+#include <string>
 using namespace std;
 
 // true length = len of string without extra spaces at end to accomodate %20

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <algorithm> // to use std::sort() --> C++ uses something called Introsort T = n log n, S = log n
+#include <string>
 
 using namespace std;
 

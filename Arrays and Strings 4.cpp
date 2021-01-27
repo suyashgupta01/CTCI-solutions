@@ -1,4 +1,5 @@
 #include<iostream>
+#include <string>
 using namespace std;
 
 bool check_permutation_of_palindrome(string str)

@@ -1,4 +1,5 @@
 #include<iostream>
+#include <string>
 using namespace std;
 
 string bool_to_string(bool value)

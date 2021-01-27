@@ -1,5 +1,6 @@
 #include<iostream>
 #include<vector>
+#include <string>
 using namespace std;
 
 // There are only upper, lowercase letters. No other characters in strings
