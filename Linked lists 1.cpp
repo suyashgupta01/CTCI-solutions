@@ -120,6 +120,7 @@ void delete_all_nodes(Node* &head) // empty the memory to avoid leaked memory
 
 // ----------- boilerplate ends ---------
 
+// Check if the given elem is in the given set
 bool in_set(unordered_set<int> s, int elem)
 {
 	unordered_set<int>::iterator it;
@@ -130,8 +131,10 @@ bool in_set(unordered_set<int> s, int elem)
 		return true;
 }
 
-// taking head by reference as we'll modify original linked list
-void remove_dups(Node* &head)
+// I'll be taking head by reference as we'll modify original linked list
+
+// IF EXTRA BUFFER IS ALLOWED
+void remove_dups1(Node* &head)
 {
 	unordered_set<int> s;
 	Node* temp = head;
@@ -154,6 +157,58 @@ void remove_dups(Node* &head)
 	
 }
 
+// IF EXTRA BUFFER IS NOT ALLOWED: My implementation
+void remove_dups2(Node* &head)
+{
+	Node* temp = head;
+	Node* runner; // this pointer will start one after temp and go to the last to check for any duplicates
+	Node* before_runner; // this pointer trails 1 step behind the runner pointer
+	while(temp != NULL)
+	{
+		before_runner = temp;
+		runner = temp->next;
+		
+		// remove all nodes with data == current node's data
+		while(runner != NULL)
+		{
+			if(runner->data == temp->data) // duplicate found => delete it
+			{
+				before_runner->next = runner->next;
+			}
+			else
+				before_runner = before_runner->next;
+			runner = runner->next;
+			// runner is updated in every iteration
+			// before_runner is updated only when a node is not deleted in that iteration (if not, it'll point to deleted node!)
+		}
+		temp = temp->next;
+	}
+	
+}
+
+// IF EXTRA BUFFER IS NOT ALLOWED: CTCI's implementation (uses one less pointer)
+void remove_dups3(Node* &head)
+{
+	Node* temp = head;
+	Node* runner; // this pointer will start from temp and go to the last to check for any duplicates
+	while(temp != NULL)
+	{
+		runner = temp;
+		
+		while(runner->next != NULL)
+		{
+			if(runner->next->data == temp->data)
+				runner->next = runner->next->next;
+			else
+				runner = runner->next;
+		}
+		
+		temp = temp->next;
+		
+	}
+	
+}
+
 int main()
 {
 	Node* head = NULL;
@@ -169,7 +224,9 @@ int main()
 	insert_at_tail(head, 5);
 	display(head);
 	cout<<"\n";
-	remove_dups(head);
+//	remove_dups1(head);
+//	remove_dups2(head);
+	remove_dups3(head);
 	display(head);
 	cout<<"\n";
 	delete_all_nodes(head);	
