@@ -1,3 +1,6 @@
+#include<unordered_set>
+#include<algorithm>
+#include<iterator>
 // ----------- boilerplate starts ---------
 
 #include<iostream>
@@ -99,7 +102,7 @@ void delete_by_location(Node* &head, int loc)
 	delete temp2;
 }
 
-void delete_all_nodes(Node* head) // empty the memory to avoid leaked memory
+void delete_all_nodes(Node* &head) // empty the memory to avoid leaked memory
 {
 	vector<Node*> all_addresses; // will store addresses of all nodes
 	Node* temp = head;
@@ -117,71 +120,53 @@ void delete_all_nodes(Node* head) // empty the memory to avoid leaked memory
 
 // ----------- boilerplate ends ---------
 
-// function to check if a given value already exists in a vector
-bool data_exists(int data, vector<int> v)
+bool in_set(unordered_set<int> s, int elem)
 {
-	for(int i=0; i<v.size(); i++)
-	{
-		if(data == v[i])
-			return true;
-	}
-	return false;
+	unordered_set<int>::iterator it;
+	it = s.find(elem);
+	if(it == s.end())
+		return false;
+	else
+		return true;
 }
 
 // taking head by reference as we'll modify original linked list
 void remove_dups(Node* &head)
 {
-	vector<int> unique_elements, indices_to_be_deleted;
-	int data, index_counter;
-	Node* temp_aage = head->next; // points to 1th node
-	Node* temp_piche = head;      // points to 0th node
-	
-	while(temp_aage != NULL)
+	unordered_set<int> s;
+	Node* temp = head;
+	Node* before_temp = NULL; // this pointer trails 1 step behind the temp pointer
+	while(temp != NULL)
 	{
-		index_counter++;
-		int data = temp_aage->data;
-		if (data_exists(data, unique_elements))
-			{	
-				indices_to_be_deleted.push_back(index_counter);
-			}
-		else
-			unique_elements.push_back(data);
-		
-		temp_aage = temp_aage->next;
-		temp_piche = temp_piche->next;
-	}
-	
-	for(int i = 0; i<indices_to_be_deleted.size(); i++)
-	{
-		cout<<indices_to_be_deleted[i]<< " ";
-	}
-	
-	for(int i = 0; i<indices_to_be_deleted.size(); i++)
-	{
-		delete_by_location(head, indices_to_be_deleted[i]);
-		
-		// now as one element has been deleted
-		// uske aage/ right vale sab ke index -1 ho gaye
-		for(int j = i+1; i<indices_to_be_deleted.size(); j++)
+		if(in_set(s, temp->data)) // if current val is already in the set, delete it from linked list
 		{
-			indices_to_be_deleted[j]--;
+			before_temp->next = temp->next;
 		}
+		else // else add it to the set
+		{
+			s.insert(temp->data);
+			before_temp = temp;
+			// read NOTE at bottom
+		}
+		temp = temp->next;
+		// """x"""
 	}
+	
 }
 
 int main()
 {
 	Node* head = NULL;
+	insert_at_tail(head, 5);
 	insert_at_tail(head, 1);
-	insert_at_tail(head, 55);
+	insert_at_tail(head, 2);
+	insert_at_tail(head, 1);
+	insert_at_tail(head, 2);
+	insert_at_tail(head, 1);
 	insert_at_tail(head, 3);
 	insert_at_tail(head, 4);
-	insert_at_tail(head, 1);
-	insert_at_tail(head, 55);
-	insert_at_tail(head, 101);	
-	insert_at_tail(head, 25);	
-	insert_at_tail(head, 1);
-	insert_at_tail(head, 250);		
+	insert_at_tail(head, 5);
+	insert_at_tail(head, 5);
 	display(head);
 	cout<<"\n";
 	remove_dups(head);
@@ -190,3 +175,12 @@ int main()
 	delete_all_nodes(head);	
 	return 0;
 }
+
+// NOTE: 
+// we update before_temp only when the newly encountered node isn't a duplicate
+// if we update before_temp at """x""" (in every iteration),
+// then it will point may point to a node that has been deleted 
+// and even worse is this-> deleted_node    duplicate_node_to_be_deleted       next_good_node
+//                             ^                        ^
+//                          before_temp               temp
+// in this case, a node that's supposed to be deleted will point to the next good node!

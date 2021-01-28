@@ -114,7 +114,7 @@ string search(Node* head, int key)
 	return "\n" + to_string(key) + " not found\n";
 }
 
-void delete_all_nodes(Node* head) // empty the memory to avoid leaked memory
+void delete_all_nodes(Node* &head) // empty the memory to avoid leaked memory
 {
 	vector<Node*> all_addresses; // will store addresses of all nodes
 	Node* temp = head;
