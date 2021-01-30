@@ -121,6 +121,8 @@ void delete_all_nodes(Node* &head) // empty the memory to avoid leaked memory
 
 int kth_element_from_last1(Node* head, int k)
 {
+	if (head == NULL)
+		return -1;
 	// Assuming that idices from last START FROM 1. 
 	// Assuming that length of the linked list is not known (if it's known then question hi nhi bachega lol)
 	Node* temp;
@@ -153,8 +155,11 @@ int kth_element_from_last1(Node* head, int k)
 	return -1; 
 }
 
+// CTCI's iterative approach
 int kth_element_from_last2(Node* head, int k)
 {
+	if (head == NULL)
+		return -1;
 	// use two pointers
 	// temp starts from the head
 	// forward starts from head+k
