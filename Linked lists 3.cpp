@@ -117,105 +117,44 @@ void delete_all_nodes(Node* &head) // empty the memory to avoid leaked memory
 
 // ----------- boilerplate ends ---------
 
-// Will be taking head by value as we don't have to modify the linked list
-
-int kth_element_from_last1(Node* head, int k)
+void delete_node(Node* &temp) // temp points to the node to be deleted
 {
-	if (head == NULL)
-		return -1;
-	// Assuming that idices from last START FROM 1. 
-	// Assuming that length of the linked list is not known (if it's known then question hi nhi bachega lol)
-	Node* temp;
-	int len, counter, position_from_start;
-	
-	//find length of LL 
-	counter = 0;
-	temp = head;
-	while(temp != NULL) 
-	{
-		counter++;
-		temp = temp->next;
-	}
-	len = counter;
-	
-	// find at what position the elemtn will be from start
-    position_from_start = len - k; // draw on paper to be clear
-	
-	// now find the element
-	counter = 0;
-	temp = head;
-	while(temp != NULL) 
-	{
-		if(counter == position_from_start)
-			return temp->data;
-		counter++;
-		temp = temp->next;
-	}
-	
-	return -1; 
-}
+	// check node is not last node
+	if(temp->next == NULL)
+		return;
 
-// CTCI's iterative approach
-int kth_element_from_last2(Node* head, int k)
-{
-	if (head == NULL)
-		return -1;
-	// use two pointers
-	// temp starts from the head
-	// forward starts from head+k
-	// => when forward is at the end, temp is at end-k = len of LL - k = kth position from last
-	Node* temp;
-	Node* forward;
-	int counter;
+	// copy data from the next node to current node
+	temp->data = temp->next->data;
 	
-	// move forward upto (head+k)th position, ie: at kth index
-	counter = 0;
-	temp = head;
-	while(temp != NULL)
-	{
-		if(counter == k)
-		{
-			forward = temp;
-			break;
-		}
-		counter++;
-		temp = temp->next;
-	}
-	
-	// iterate through LL upto the end
-	temp = head;
-	while(forward != NULL)
-	{
-		forward = forward->next;
-		temp = temp->next;
-	}	
-	
-	return temp->data;
-}
-
-// CTCI's recurssive approach
-int kth_element_from_last3(Node* head, int k)
-{
-	if(head == NULL)
-		return -1;
-	
-	node* temp = head;
-	node* n = kth_element_from_last3(temp->next, k)
+	// delete the next node
+	temp->next = temp->next->next;
 }
 
 int main()
 {
 	Node* head = NULL;
-	insert_at_tail(head,10);
-	insert_at_tail(head,20);
-	insert_at_tail(head,30);
-	insert_at_tail(head,40);
-	insert_at_tail(head,50);
-	insert_at_tail(head,60);
-	insert_at_tail(head,70);
-	insert_at_tail(head,80);
-	insert_at_tail(head,90);
-//	cout<<kth_element_from_last1(head, 3);
-//	cout<<kth_element_from_last2(head, 3);
-	cout<<kth_element_from_last3(head, 3);
+	Node* temp;
+	insert_at_tail(head, 10);
+	insert_at_tail(head, 20);
+	insert_at_tail(head, 30);
+	insert_at_tail(head, 40);
+	insert_at_tail(head, 50);
+	
+	// get a pointer to 3th node (40)
+	temp = head;
+	while(temp != NULL)
+	{
+		if(temp->data == 40)
+			break;
+		temp = temp->next;
+	}
+	
+	display(head);
+	delete_node(temp);
+	cout<<"\n";
+	display(head);
+	
+	delete_all_nodes(head);
+	
+	return 0;
 }
