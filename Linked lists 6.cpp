@@ -146,15 +146,65 @@ bool is_palindrome(Node* head)
 	return true;
 }
 
-// CTCI's way1
-bool is_palindrome1(Node* head) 
+// CTCI's way:
+
+// returns head; basically a copy of the linked list
+Node* duplicate(Node* head)
 {
-	// reversing the linked list's first half in place and comparing it to the second
+	Node *temp = head;
+	Node *new_head = NULL;
+	
+	while(temp != NULL)
+	{
+		insert_at_tail(new_head, temp->data);
+		temp = temp->next;
+	}
+	
+	return new_head;
 }
 
-void reverse(Node* &head)
+void reverse(Node *&head)
 {
+	if(head == NULL)
+		return;
+		
+	Node *temp, *next, *prev;
+	temp = head;
+	prev = NULL;
+
+	while(temp!=NULL)
+	{
+		next = temp->next; // save the reference of the next node
+		temp->next = prev; // reverse this connection/ link
+		prev = temp;       // store the address of the current node to be used in the next iteration
+		temp = next;       // update temp; now temp points to the next node
+	}
 	
+	// when loop is done, prev points to the last node or the original LL = first node of reversed LL
+	head = prev;
+}
+
+bool is_palindrome1(Node* head) 
+{
+	// Create a copy of the linked list
+	Node *head_old = duplicate(head);
+	
+	// reversing the linked list in place
+	reverse(head);
+	
+	// Compare the linked lists 
+	// Actually, We only need to compare the first halves of the linked lists, 
+	// for that we can calcuate the length and iterate upto length/2, but not doing that for now
+	Node* temp1 = head_old; // original LL
+	Node* temp2 = head;     // reversed LL
+	while(temp1 != NULL and temp2 != NULL)
+	{
+		if(temp1->data != temp2->data)
+			return false;
+		temp1 = temp1->next;
+		temp2 = temp2->next;
+	}
+	return true;
 }
 
 int main()
@@ -166,7 +216,9 @@ int main()
 	insert_at_tail(head, 40);
 	insert_at_tail(head, 50);
 	display(head);
-	cout<<"\n"<<is_palindrome(head)<<"\n"; // should print 0
+//	cout<<"\n"<<is_palindrome(head)<<"\n"; // should print 0
+	cout<<"\n"<<is_palindrome1(head)<<"\n"; // should print 0
+	delete_all_nodes(head);
 	
 	Node* head1 = NULL;
 	insert_at_tail(head1, 1);
@@ -175,10 +227,23 @@ int main()
 	insert_at_tail(head1, 2);
 	insert_at_tail(head1, 1);
 	display(head1);
-	cout<<"\n"<<is_palindrome(head1); // should print 1	
-	
-	delete_all_nodes(head);
+//	cout<<"\n"<<is_palindrome(head1); // should print 1	
+	cout<<"\n"<<is_palindrome1(head1); // should print 1	
 	delete_all_nodes(head1);
+
+// Just to test reverse()
+//	Node* head = NULL;
+//	insert_at_tail(head, 10);
+//	insert_at_tail(head, 20);
+//	insert_at_tail(head, 30);
+//	insert_at_tail(head, 40);
+//	insert_at_tail(head, 50);
+//	insert_at_tail(head, 60);
+//	display(head);
+//	cout<<"\n\n";
+//	reverse(head);
+//	display(head);
+//	delete_all_nodes(head);
 	
 	return 0;
 }
