@@ -1,3 +1,4 @@
+#include<stack>
 // ----------- boilerplate starts ---------
 
 #include<iostream>
@@ -184,7 +185,7 @@ void reverse(Node *&head)
 	head = prev;
 }
 
-bool is_palindrome1(Node* head) 
+bool is_palindrome1(Node* head) // Approach 1 of CTCI
 {
 	// Create a copy of the linked list
 	Node *head_old = duplicate(head);
@@ -207,6 +208,42 @@ bool is_palindrome1(Node* head)
 	return true;
 }
 
+bool is_palindrome2(Node* head) // Approach 2 of CTCI
+{
+	// store the first half of the LL in the stack
+	// then extract (automatically in reverse order) & compare it with the second half
+	
+	Node *slow = head, *fast = head;
+	stack<int> s;
+	
+	// divide the stack in 2 parts using the slow, fast pointer method
+	// slow moves 1 step, fast moves 2 steps
+	// when fast reaches the end, slow is at middle.
+	while(fast!=NULL and fast->next!=NULL)
+	{
+		s.push(slow->data);
+		slow = slow->next;
+		fast = fast->next->next;
+	}
+	
+	// if fast = NULL, len of LL was even | Just draw on paper to confirm
+	if(fast != NULL)
+	{
+		// odd len => ignore middle element while checking for palindrome
+		slow = slow->next;
+	}
+		
+	// Now compare
+	while(slow!=NULL)
+	{
+		if(slow->data != s.top())
+			return false;
+		slow = slow->next;
+		s.pop();
+	}
+	return true;
+}
+
 int main()
 {
 	Node* head = NULL;
@@ -217,7 +254,8 @@ int main()
 	insert_at_tail(head, 50);
 	display(head);
 //	cout<<"\n"<<is_palindrome(head)<<"\n"; // should print 0
-	cout<<"\n"<<is_palindrome1(head)<<"\n"; // should print 0
+//	cout<<"\n"<<is_palindrome1(head)<<"\n"; // should print 0
+	cout<<"\n"<<is_palindrome2(head)<<"\n"; // should print 0
 	delete_all_nodes(head);
 	
 	Node* head1 = NULL;
@@ -228,7 +266,8 @@ int main()
 	insert_at_tail(head1, 1);
 	display(head1);
 //	cout<<"\n"<<is_palindrome(head1); // should print 1	
-	cout<<"\n"<<is_palindrome1(head1); // should print 1	
+//	cout<<"\n"<<is_palindrome1(head1); // should print 1	
+	cout<<"\n"<<is_palindrome2(head1)<<"\n"; // should print 1
 	delete_all_nodes(head1);
 
 // Just to test reverse()
