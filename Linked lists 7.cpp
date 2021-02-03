@@ -154,6 +154,45 @@ Node* check_intersection_by_reference(Node *head1, Node *head2)
 		return NULL;
 }
 
+// CTCI's way
+Node* check_intersection_by_reference1(Node *head1, Node *head2)
+{
+	Node *temp1 = head1; Node *temp2 = head2; int counter1 = 0; int counter2 = 0;
+	
+	// take temp1, temp2 to the end of each LL
+	while(temp1 != NULL) {temp1 = temp1->next; counter1++;}
+	while(temp2 != NULL) {temp2 = temp2->next; counter2++;}	
+	
+	if(temp1 == temp2) // If ends are same => intersecting LLs. We need to return the intersecting node
+	{
+		// Get rid of the extra beginning nodes of the longer LL
+		// Move forward the longer LL's head forward to make the lenghts of LLs same
+		if (counter1 > counter2)
+		{
+			for(int i = 0; i<counter1-counter2-1; i++) // draw intersecting LLs on paper to understand counter1-counter2-1
+			{head1 = head1->next;}
+			
+		}
+		else
+		{
+			for(int i = 0; i<counter2-counter1-1; i++) 
+			{head2 = head2->next;}
+		}
+		
+		// Now iterate both linked lists simultaneously and return when the first same reference is encountered, return it
+		temp1 = head1; temp2 = head2; 
+		while(temp1 != NULL and temp2 != NULL)
+		{
+			if(temp1 == temp2)
+				return temp1;
+			temp2=temp2->next;
+			temp1=temp1->next;
+		}
+	}
+	else 
+		return NULL;
+}
+
 int main()
 {
 	Node* head1 = NULL;
@@ -168,7 +207,10 @@ int main()
 	// Now making the last node of LL2 point to X.
 	head2->next->next = head1->next->next;
 	
-	Node* temp = check_intersection_by_reference(head1, head2);
+//	Node* temp = check_intersection_by_reference(head1, head2);
+//	cout<<temp->data; // should print 7
+	
+	Node* temp = check_intersection_by_reference1(head1, head2);
 	cout<<temp->data; // should print 7
 	
 	return 0;
