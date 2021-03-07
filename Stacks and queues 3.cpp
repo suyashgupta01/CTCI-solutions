@@ -75,6 +75,7 @@ class SetOfStacks
 			ptr_to_required_substack->pop();
 		}
 		// now, we need to manage rolling over elements
+		// and then if last stack becomes empty, delete it
 			
 	}
 	
